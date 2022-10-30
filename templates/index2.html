@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"> </script>
+    <title>Document</title>
+</head>
+<body>
+この文字を下に書いてみよう！
+{% for i in zyukugo %}
+    <tr>
+    <td>{{ i.zyukugo }}</td>
+    </tr>
+{% endfor %}
+
+<div><canvas id="WriteCanvas" width="240" height="240"></canvas></div>
+<div><canvas id="ButtonCanvas" width="240" height="100"></canvas></div>
+PNG形式
+
+
+<a href="{{ url_for('insert') }}">一番下へ追加</a>
+<a href="{{ url_for('index') }}">削除</a>
+<a href="{{ url_for('index3') }}">3へ</a>
+
+<form method="post" action="{{ url_for('register_character') }}">
+    <!-- <table border="1"> -->
+            <!-- <tr>
+                <td><input type="text" name="character"></td>
+            </tr>
+      </table>
+      <br> -->
+      <div id="bs"><img id="copyImg" width="240" height="240" background="#000000"></div>
+      <input type="submit" value="追加">
+      <input type="file" name="copyimg">
+    </form>
+
+
+</body>
+</html>
+
+
+<script>
+    window.addEventListener("load", init);
+    function init() {
+    
+        // --------------------------------------------------------------
+        // Stage1オブジェクト：WriteCanvas
+        // --------------------------------------------------------------
+        var stage1 = new createjs.Stage("WriteCanvas");
+    
+        // タッチイベントが有効なブラウザの場合、
+        // CreateJSでタッチイベントを扱えるようにする
+        if (createjs.Touch.isSupported()) {
+            createjs.Touch.enable(stage1);
+        }
+    
+        var shape = new createjs.Shape();   // シェイプを作成
+        stage1.addChild(shape);             // ステージに配置
+    
+        handleClick_reset();
+    
+        // ステージ上でマウスボタンを押した時のイベント設定
+        stage1.addEventListener("stagemousedown", handleDown);
+    
+        // マウスを押した時に実行される
+        function handleDown(event) {
+    
+            var paintColor = "#FFFFFF"                      // 筆ペンの色
+    
+            // 線の描画を開始
+            shape.graphics
+                    .beginStroke(paintColor)                // 指定のカラーで描画
+                    .setStrokeStyle(20, "round")            // 線の太さ、形
+                    .moveTo(event.stageX, event.stageY);    // 描画開始位置を指定
+    
+            // ステージ上でマウスを動かした時と離した時のイベント設定
+            stage1.addEventListener("stagemousemove", handleMove);
+            stage1.addEventListener("stagemouseup", handleUp);
+        }
+    
+        // マウスが動いた時に実行する
+        function handleMove(event) {
+    
+            // マウス座標への線を引く
+            shape.graphics.lineTo(event.stageX, event.stageY);
+        }
+    
+        // マウスボタンが離された時に実行される
+        function handleUp(event) {
+    
+            // マウス座標への線を引く
+            shape.graphics.lineTo(event.stageX, event.stageY);
+    
+            // 線の描画を終了する
+            shape.graphics.endStroke();
+    
+            // イベント解除
+            stage1.removeEventListener("stagemousemove", handleMove);
+            stage1.removeEventListener("stagemouseup", handleUp);
+        }
+    
+        createjs.Ticker.timingMode = createjs.Ticker.RAF;
+        createjs.Ticker.addEventListener("tick", onTick);
+    
+        function onTick() {
+            stage1.update(); // Stageの描画を更新
+        }
+    
+        // --------------------------------------------------------------
+        // Stage2オブジェクト：ButtonCanvas
+        // --------------------------------------------------------------
+        var stage2 = new createjs.Stage("ButtonCanvas");
+        stage2.enableMouseOver();
+    
+        // ボタンを作成
+        var btn1 = createButton("PNG変換", 80, 30, "#0650c7");
+        btn1.x = 20;
+        btn1.y = 10;
+        stage2.addChild(btn1);
+    
+        var btn2 = createButton("Reset!", 80, 30, "#d10a50");
+        btn2.x = 110;
+        btn2.y = 10;
+        stage2.addChild(btn2);
+    
+        // イベントを登録
+        btn1.addEventListener("click", handleClick_png);
+        btn2.addEventListener("click", handleClick_reset);
+    
+        // PNG変換ボタン押下イベント
+        function handleClick_png(event) {
+    
+            // Canvasタグから画像に変換
+            stage1.update();
+            var png = stage1.canvas.toDataURL();
+            document.getElementById("copyImg").src = png;
+    
+            /*
+            var w = window.open('about:blank');
+            w.document.write("<img src='" + png + "'/>");
+            */
+        }
+    
+        // Rest!ボタン押下イベント
+        function handleClick_reset(event) {
+    
+            // シェイプのグラフィックスを消去
+            shape.graphics.clear();
+            shape.graphics.beginFill("black");
+            shape.graphics.drawRect(0, 0, 240, 240);
+            shape.graphics.endFill();
+            stage1.update();
+            var png = stage1.canvas.toDataURL();
+            document.getElementById("copyImg").src = png;
+        }
+    
+        // 時間経過イベント
+        createjs.Ticker.addEventListener("tick", handleTick);
+        function handleTick() {
+    
+            // Stage2の描画を更新
+            stage2.update();
+        }
+    
+        /**
+        * @param {String} text ボタンのラベル文言です。
+        * @param {Number} width ボタンの横幅(単位はpx)です。
+        * @param {Number} height ボタンの高さ(単位はpx)です。
+        * @param {String} keyColor ボタンのキーカラーです。
+        * @returns {createjs.Container} ボタンの参照を返します。
+        */
+        function createButton(text, width, height, keyColor) {
+    
+            // ボタン要素をグループ化
+            var button = new createjs.Container();
+            button.name = text; // ボタンに参考までに名称を入れておく(必須ではない)
+            button.cursor = "pointer"; // ホバー時にカーソルを変更する
+    
+            // 通常時の座布団を作成
+            var bgUp = new createjs.Shape();
+            bgUp.graphics
+                  .setStrokeStyle(1.0)
+                  .beginStroke(keyColor)
+                  .beginFill("white")
+                  .drawRoundRect(0.5, 0.5, width - 1.0, height - 1.0, 4);
+            button.addChild(bgUp);
+            bgUp.visible = true; // 表示する
+    
+            // ロールオーバー時の座布団を作成
+            var bgOver = new createjs.Shape();
+            bgOver.graphics
+                  .beginFill(keyColor)
+                  .drawRoundRect(0, 0, width, height, 4);
+            bgOver.visible = false; // 非表示にする
+            button.addChild(bgOver);
+    
+            // ラベルを作成
+            var label = new createjs.Text(text, "18px sans-serif", keyColor);
+            label.x = width / 2;
+            label.y = height / 2;
+            label.textAlign = "center";
+            label.textBaseline = "middle";
+            button.addChild(label);
+    
+            // ロールオーバーイベントを登録
+            button.addEventListener("mouseover", handleMouseOver);
+            button.addEventListener("mouseout", handleMouseOut);
+    
+            // マウスオーバイベント
+            function handleMouseOver(event) {
+                bgUp.visble = false;
+                bgOver.visible = true;
+                label.color = "white";
+            }
+    
+            // マウスアウトイベント
+            function handleMouseOut(event) {
+                bgUp.visble = true;
+                bgOver.visible = false;
+                label.color = keyColor;
+            }
+    
+            return button;
+        }
+    }
+    </script>

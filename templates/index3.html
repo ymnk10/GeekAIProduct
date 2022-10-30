@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <title>Document</title>
+</head>
+<body>
+    ssssss
+    {% for i in zyukugo %}
+        <tr>
+        <td>{{ i.zyukugo }}</td>
+        </tr>
+    {% endfor %}
+
+<p>{{ zyukugo[0]['zyukugo'] }}</p>
+
+
+
+{% for i in zyukugo[0]['zyukugo'] %}
+    {% if i == 'ん' %}
+    <p class="abc">{{ i }}</p>
+
+    {% else %}
+    <div>{{ i }}</div>
+
+    {% endif %}
+
+{% endfor %}
+
+    
+    <a href="{{ url_for('insert') }}">一番下へ追加</a>
+<form method="post" action="{{ url_for('delete') }}">
+    <a href="{{ url_for('index') }}">削除</a>
+    <input type="submit" value="Delete Selected One">
+    <input type="text" name="db_zyukugo_top" value="{{ zyukugo[0]['zyukugo'] }}">
+</form>
+    
+</body>
+</html>

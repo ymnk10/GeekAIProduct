@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>矯正ちゃん</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+<h1>矯正ちゃん</h1>
+<h2>モードを選んでね</h2>
+<a href="{{ url_for('index2') }}">ひらがなモード</a>
+
+{% for i in zyukugo %}
+    <tr>
+    <td>{{ i.zyukugo }}</td>
+    </tr>
+{% endfor %}
+
+
+<!-- {% if books == [] %}
+  <p>今月の新刊情報はまだありません。</p>
+{% else %}
+    <table border="'1">
+      <tr>
+        <th>入荷日</th>
+        <th>タイトル</th>
+        <th>金額</th>
+      </tr>
+      {% for book in books %}
+        <tr>
+          <td>{{ book.title }}</td>
+          <td>{{ book.price }}</td>
+          <td>{{ book.arrival_day }}</td>
+          <td>{{ book.arrival_day }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+{% endif %} -->
+<a href="{{ url_for('form') }}">編集</a>
+</body>
+</html>
