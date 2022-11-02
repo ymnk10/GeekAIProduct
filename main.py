@@ -52,11 +52,15 @@ def index2():
 def index3():
     con = sqlite3.connect(DATABASE)
     db_zyukugo = con.execute('SELECT * FROM zyukugo LIMIT 1').fetchall()
+    db_characters = con.execute('SELECT * FROM characters').fetchall()
     con.close()
     zyukugo = []
+    characters = []
     for row in db_zyukugo:
         zyukugo.append({'zyukugo': row[0]})
-    return render_template('index3.html',zyukugo=zyukugo)
+    for row in db_characters:
+        characters.append({'character': row[0]})
+    return render_template('index3.html',zyukugo=zyukugo, characters=characters)
 
 
 @app.route('/delete', methods=['POST'])
