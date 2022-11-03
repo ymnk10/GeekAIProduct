@@ -59,7 +59,8 @@ def index3():
     for row in db_zyukugo:
         zyukugo.append({'zyukugo': row[0]})
     for row in db_characters:
-        characters.append({'character': row[0]})
+        characters.append(row[0])
+    print(characters)
     return render_template('index3.html',zyukugo=zyukugo, characters=characters)
 
 

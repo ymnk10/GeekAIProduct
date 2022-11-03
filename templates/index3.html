@@ -8,12 +8,7 @@
     <title>Document</title>
 </head>
 <body>
-    ssssss
-    {% for i in zyukugo %}
-        <tr>
-        <td>{{ i.zyukugo }}</td>
-        </tr>
-    {% endfor %}
+
 
 <p>{{ zyukugo[0]['zyukugo'] }}</p>
 
@@ -30,6 +25,10 @@
 
 {% endfor %}
 
+
+{% for i in characters %}
+    {{ loop.index }}
+{% endfor %}
     
     <a href="{{ url_for('insert') }}">一番下へ追加</a>
 <form method="post" action="{{ url_for('delete') }}">
