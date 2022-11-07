@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,18 +10,19 @@
 </head>
 <body>
 この文字を下に書いてみよう！
-{% for i in zyukugo %}
+<!-- {% for i in zyukugo %}
     <tr>
     <td>{{ i.zyukugo }}</td>
     </tr>
-{% endfor %}
+{% endfor %} -->
+{{ zyukugo }}
 
 <div><canvas id="WriteCanvas" width="240" height="240"></canvas></div>
 <div><canvas id="ButtonCanvas" width="240" height="100"></canvas></div>
 PNG形式
 
 
-<a href="{{ url_for('insert') }}">一番下へ追加</a>
+
 <a href="{{ url_for('index') }}">削除</a>
 <a href="{{ url_for('index3') }}">3へ</a>
 
@@ -138,10 +139,10 @@ PNG形式
             var png = stage1.canvas.toDataURL();
             document.getElementById("copyImg").src = png;
     
-            /*
-            var w = window.open('about:blank');
-            w.document.write("<img src='" + png + "'/>");
-            */
+            
+            // var w = window.open('about:blank');
+            // w.document.write("<img src='" + png + "'/>");
+            
         }
     
         // Rest!ボタン押下イベント

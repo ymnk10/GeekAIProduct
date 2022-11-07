@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,31 +10,30 @@
 <body>
 
 
-<p>{{ zyukugo[0]['zyukugo'] }}</p>
-
-
-
-{% for i in zyukugo[0]['zyukugo'] %}
-    {% if i == 'ん' %}
-    <p class="abc">{{ i }}</p>
-
+<p>{{ zyukugo|list }}</p>
+<p>{{ zyukugo }}</p>
+<p>{{ "".join(characters) }}</p>
+{% for i in range(zyukugo|length) %}
+    {% if zyukugo[i] == characters[i] %}}
+        <nobr>{{ characters[i] }}</nobr>
     {% else %}
-    <div>{{ i }}</div>
-
+        <nobr class="abc">{{ characters[i] }}</nobr>
     {% endif %}
-
 {% endfor %}
+
+  
+
 
 
 {% for i in characters %}
     {{ loop.index }}
 {% endfor %}
     
-    <a href="{{ url_for('insert') }}">一番下へ追加</a>
+
 <form method="post" action="{{ url_for('delete') }}">
-    <a href="{{ url_for('index') }}">削除</a>
-    <input type="submit" value="Delete Selected One">
-    <input type="text" name="db_zyukugo_top" value="{{ zyukugo[0]['zyukugo'] }}">
+    <!-- <a href="{{ url_for('index') }}">はじめにもどる</a> -->
+    <input type="submit" value="はじめにもどる">
+    <!-- <input type="text" name="db_zyukugo_top" value="{{ zyukugo[0]['zyukugo'] }}"> -->
 </form>
     
 </body>

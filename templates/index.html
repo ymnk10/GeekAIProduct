@@ -12,11 +12,7 @@
 <h2>モードを選んでね</h2>
 <a href="{{ url_for('index2') }}">ひらがなモード</a>
 
-{% for i in zyukugo %}
-    <tr>
-    <td>{{ i.zyukugo }}</td>
-    </tr>
-{% endfor %}
+
 
 
 <!-- {% if books == [] %}
@@ -38,6 +34,6 @@
       {% endfor %}
     </table>
 {% endif %} -->
-<a href="{{ url_for('form') }}">編集</a>
+
 </body>
 </html>
