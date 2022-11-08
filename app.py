@@ -1,6 +1,5 @@
 # from flaskr import app
 from flask import Flask, render_template, request, redirect, url_for
-import db
 from PIL import Image
 import pyocr
 import base64
