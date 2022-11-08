@@ -223,4 +223,4 @@ def register_character():
 #     return redirect(url_for('index'))
 
 
-app.run(debug=True)
+app.run(port=8888, debug=True)
