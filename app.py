@@ -2,11 +2,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 from PIL import Image
 import pyocr
-import base64
-import requests
-from bs4 import BeautifulSoup
-import numpy as np
-import io
+# import base64
+# import requests
+# from bs4 import BeautifulSoup
+# import numpy as np
+# import io
 
 pyocr.tesseract.TESSERACT_CMD = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe' #これ入れないと動かないっぽい(デバッグ10/13)
 # db.create_zyukugo_table()
