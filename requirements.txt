@@ -5,4 +5,3 @@ pyocr==0.8.3
 tesseract==5.2.0
 vc==14.2
 beautifulsoup4==4.11.1
-tesseract==5.2.0

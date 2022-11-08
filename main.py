@@ -8,11 +8,10 @@ import requests
 from bs4 import BeautifulSoup
 import numpy as np
 import io
-# import sqlite3
 
 pyocr.tesseract.TESSERACT_CMD = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe' #これ入れないと動かないっぽい(デバッグ10/13)
-db.create_zyukugo_table()
-db.create_characters_table()
+# db.create_zyukugo_table()
+# db.create_characters_table()
 # DATABASE = 'database.db'
 
 # app = Flask(__name__)
