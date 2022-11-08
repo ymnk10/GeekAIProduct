@@ -222,5 +222,5 @@ def register_character():
 #     con.close()
 #     return redirect(url_for('index'))
 
-
-app.run(port=22222)
+if __name__ == "__main__":
+    app.run(port=22222)
