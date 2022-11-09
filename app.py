@@ -7,8 +7,12 @@ import pyocr
 # from bs4 import BeautifulSoup
 # import numpy as np
 # import io
+import requests
+from bs4 import BeautifulSoup
+import matplotlib.pyplot as plt
+import cv2 #pipでもインストールしたら解決
 
-pyocr.tesseract.TESSERACT_CMD = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe' #これ入れないと動かないっぽい(デバッグ10/13)
+pyocr.tesseract.TESSERACT_CMD = r'Tesseract-OCR\tesseract.exe' #これ入れないと動かないっぽい(デバッグ10/13)
 # db.create_zyukugo_table()
 # db.create_characters_table()
 # DATABASE = 'database.db'
@@ -127,7 +131,6 @@ def delete():
     return redirect(url_for('index'))
 
 
-# chara_list=[]
 
 # @app.route('/register_character', methods=['POST'])
 # def register_character():
@@ -153,12 +156,40 @@ def delete():
 #     return redirect(url_for('index2'))
 
 
+
+
+
 @app.route('/register_character', methods=['POST'])
 def register_character():
-    copyimg = request.form['copyimg']
-    print(copyimg)
+    root = "https://kyousei-tyan.herokuapp.com/"
+    url = "https://kyousei-tyan.herokuapp.com/index2"
+    # store_path = "C:\\Users\\ymnk1\\GeekSalon\\OCR2\\pafumepic.png" #\は二つ！！
+    store_path = "idake.png" #\は二つ！！
+    def img_store(path):
+        img = requests.get(path).content
+
+        print(path)
+
+        with open(store_path, "wb") as f:
+            f.write(img)
+
+        img_local = cv2.cvtColor(cv2.imread(store_path), cv2.COLOR_BGR2RGB)
+
+        plt.imshow(img_local)
+        plt.show()
+    response = requests.get(url)
+    soup = BeautifulSoup(open('templates/index2.html', encoding="utf-8"), "html.parser") #書式を指定しないとUnicodeDecodeErrorになる
+    # soup = BeautifulSoup(url, "html.parser")
+    print(soup)
+    top_img2 = soup.find("div", id="bs").find("img", id="copyImg").get("src") #classを指定するときは「class_」で表すことに注意！！
+    print(top_img2)
+    img_url=root+top_img2 #img_urlは実際に写真自体をパスに指定しなければならない(フォルダじゃない！！)
+    img_store(img_url)
+
 
     engines = pyocr.get_available_tools()
+    print(engines)
+
     engine = engines[0]
     dirname= 'idake.png' #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
     txt = engine.image_to_string(Image.open(dirname), lang="jpn", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
@@ -224,3 +255,5 @@ def register_character():
 
 if __name__ == "__main__":
     app.run(port=22222)
+
+#if __name__ == "__main__": をいれる
