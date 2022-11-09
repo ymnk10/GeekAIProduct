@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 import cv2 #pipでもインストールしたら解決
 
-pyocr.tesseract.TESSERACT_CMD = r'Tesseract-OCR\tesseract.exe' #これ入れないと動かないっぽい(デバッグ10/13)
+pyocr.tesseract.TESSERACT_CMD = 'Tesseract-OCR/tesseract.exe' #これ入れないと動かないっぽい(デバッグ10/13)
 # db.create_zyukugo_table()
 # db.create_characters_table()
 # DATABASE = 'database.db'
