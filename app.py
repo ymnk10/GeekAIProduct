@@ -161,30 +161,30 @@ def delete():
 
 @app.route('/register_character', methods=['POST'])
 def register_character():
-    root = "https://kyousei-tyan.herokuapp.com/"
-    url = "https://kyousei-tyan.herokuapp.com/index2"
-    # store_path = "C:\\Users\\ymnk1\\GeekSalon\\OCR2\\pafumepic.png" #\は二つ！！
-    store_path = "idake.png" #\は二つ！！
-    def img_store(path):
-        img = requests.get(path).content
+    # root = "https://kyousei-tyan.herokuapp.com/"
+    # url = "https://kyousei-tyan.herokuapp.com/index2"
+    # # store_path = "C:\\Users\\ymnk1\\GeekSalon\\OCR2\\pafumepic.png" #\は二つ！！
+    # store_path = "idake.png" #\は二つ！！
+    # def img_store(path):
+    #     img = requests.get(path).content
 
-        print(path)
+    #     print(path)
 
-        with open(store_path, "wb") as f:
-            f.write(img)
+    #     with open(store_path, "wb") as f:
+    #         f.write(img)
 
-        img_local = cv2.cvtColor(cv2.imread(store_path), cv2.COLOR_BGR2RGB)
+    #     img_local = cv2.cvtColor(cv2.imread(store_path), cv2.COLOR_BGR2RGB)
 
-        plt.imshow(img_local)
-        plt.show()
-    response = requests.get(url)
-    soup = BeautifulSoup(open('templates/index2.html', encoding="utf-8"), "html.parser") #書式を指定しないとUnicodeDecodeErrorになる
-    # soup = BeautifulSoup(url, "html.parser")
-    print(soup)
-    top_img2 = soup.find("div", id="bs").find("img", id="copyImg").get("src") #classを指定するときは「class_」で表すことに注意！！
-    print(top_img2)
-    img_url=root+top_img2 #img_urlは実際に写真自体をパスに指定しなければならない(フォルダじゃない！！)
-    img_store(img_url)
+    #     plt.imshow(img_local)
+    #     plt.show()
+    # response = requests.get(url)
+    # soup = BeautifulSoup(open('templates/index2.html', encoding="utf-8"), "html.parser") #書式を指定しないとUnicodeDecodeErrorになる
+    # # soup = BeautifulSoup(url, "html.parser")
+    # print(soup)
+    # top_img2 = soup.find("div", id="bs").find("img", id="copyImg").get("src") #classを指定するときは「class_」で表すことに注意！！
+    # print(top_img2)
+    # img_url=root+top_img2 #img_urlは実際に写真自体をパスに指定しなければならない(フォルダじゃない！！)
+    # img_store(img_url)
 
 
     engines = pyocr.get_available_tools()
