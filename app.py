@@ -12,7 +12,8 @@ from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 import cv2 #pipでもインストールしたら解決
 
-pyocr.tesseract.TESSERACT_CMD = 'Tesseract-OCR/tesseract.exe' #これ入れないと動かないっぽい(デバッグ10/13)
+pyocr.tesseract.TESSERACT_CMD = 'Tesseract-OCR/tesseract.exe'
+#これ入れないと動かないっぽい(デバッグ10/13)
 # db.create_zyukugo_table()
 # db.create_characters_table()
 # DATABASE = 'database.db'
@@ -187,10 +188,8 @@ def register_character():
     # img_store(img_url)
 
 
-    engines = pyocr.get_available_tools()
-    print(engines)
+    engine = pyocr.libtesseract
 
-    engine = engines[0]
     dirname= 'idake.png' #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
     txt = engine.image_to_string(Image.open(dirname), lang="jpn", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
 
