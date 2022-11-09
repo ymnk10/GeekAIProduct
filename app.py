@@ -163,7 +163,7 @@ def delete():
 
 @app.route('/register_character', methods=['POST'])
 def register_character():
-    os.chmod("Tesseract-OCR",0o777)
+    os.chmod("Tesseract-OCR/tesseract.exe",0o777)
     # root = "https://kyousei-tyan.herokuapp.com/"
     # url = "https://kyousei-tyan.herokuapp.com/index2"
     # # store_path = "C:\\Users\\ymnk1\\GeekSalon\\OCR2\\pafumepic.png" #\は二つ！！
