@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/full/path/to/your/custom/python/executable
 # from flaskr import app
 from flask import Flask, render_template, request, redirect, url_for
 from PIL import Image
