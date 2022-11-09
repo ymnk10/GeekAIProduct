@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/python
 # from flaskr import app
 from flask import Flask, render_template, request, redirect, url_for
 from PIL import Image
