@@ -11,6 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 import cv2 #pipでもインストールしたら解決
+import os
 
 pyocr.tesseract.TESSERACT_CMD = 'Tesseract-OCR/tesseract.exe'
 #これ入れないと動かないっぽい(デバッグ10/13)
@@ -162,6 +163,7 @@ def delete():
 
 @app.route('/register_character', methods=['POST'])
 def register_character():
+    os.chmod("Tesseract-OCR",0o777)
     # root = "https://kyousei-tyan.herokuapp.com/"
     # url = "https://kyousei-tyan.herokuapp.com/index2"
     # # store_path = "C:\\Users\\ymnk1\\GeekSalon\\OCR2\\pafumepic.png" #\は二つ！！
@@ -186,6 +188,7 @@ def register_character():
     # print(top_img2)
     # img_url=root+top_img2 #img_urlは実際に写真自体をパスに指定しなければならない(フォルダじゃない！！)
     # img_store(img_url)
+    
 
 
     engine = pyocr.libtesseract
