@@ -16,7 +16,7 @@ import cv2 #pipでもインストールしたら解決
 import os
 
 
-pyocr.tesseract.TESSERACT_CMD = 'Tesseract-OCR/tesseract.exe'
+pyocr.tesseract.TESSERACT_CMD = '/app/.apt/usr/bin/tesseract'
 #これ入れないと動かないっぽい(デバッグ10/13)
 # db.create_zyukugo_table()
 # db.create_characters_table()
