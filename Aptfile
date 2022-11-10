@@ -1,5 +1,8 @@
 tesseract-ocr
 tesseract-ocr-eng
+tesseract-ocr-jpn
+tesseract-ocr-script-jpan 
+tesseract-ocr-script-jpan-vert
 libsm6
 libxrender1
 libfontconfig1
