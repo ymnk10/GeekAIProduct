@@ -15,12 +15,9 @@ import matplotlib.pyplot as plt
 import cv2 #pipでもインストールしたら解決
 import os
 
-<<<<<<< HEAD
-pyocr.tesseract.TESSERACT_CMD = r'Tesseract-OCR\tesseract.exe' #これ入れないと動かないっぽい(デバッグ10/13)
-=======
+
 pyocr.tesseract.TESSERACT_CMD = 'Tesseract-OCR/tesseract.exe'
 #これ入れないと動かないっぽい(デバッグ10/13)
->>>>>>> 659cbe80b3bca99c270e1dac71694a566149536e
 # db.create_zyukugo_table()
 # db.create_characters_table()
 # DATABASE = 'database.db'
@@ -164,22 +161,14 @@ def delete():
 #     return redirect(url_for('index2'))
 
 
-<<<<<<< HEAD
-# import requests
-# from bs4 import BeautifulSoup
-# import matplotlib.pyplot as plt
-# import cv2 #pipでもインストールしたら解決
-=======
 
->>>>>>> 659cbe80b3bca99c270e1dac71694a566149536e
+
 
 
 @app.route('/register_character', methods=['POST'])
 def register_character():
-<<<<<<< HEAD
-=======
     os.chmod("Tesseract-OCR/tesseract.exe",0o777)
->>>>>>> 659cbe80b3bca99c270e1dac71694a566149536e
+
     # root = "https://kyousei-tyan.herokuapp.com/"
     # url = "https://kyousei-tyan.herokuapp.com/index2"
     # # store_path = "C:\\Users\\ymnk1\\GeekSalon\\OCR2\\pafumepic.png" #\は二つ！！
@@ -204,20 +193,9 @@ def register_character():
     # print(top_img2)
     # img_url=root+top_img2 #img_urlは実際に写真自体をパスに指定しなければならない(フォルダじゃない！！)
     # img_store(img_url)
-<<<<<<< HEAD
-
-
-    engines = pyocr.get_available_tools()
-    print(engines)
-
-    engine = engines[0]
-=======
-    
 
 
     engine = pyocr.libtesseract
-
->>>>>>> 659cbe80b3bca99c270e1dac71694a566149536e
     dirname= 'idake.png' #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
     txt = engine.image_to_string(Image.open(dirname), lang="jpn", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
 
