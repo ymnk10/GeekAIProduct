@@ -197,7 +197,7 @@ def register_character():
 
     engine = pyocr.libtesseract
     dirname= 'idake.png' #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
-    txt = engine.image_to_string(Image.open(dirname), lang="jpn", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
+    txt = engine.image_to_string(Image.open(dirname), lang="eng", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
 
     characters.append(txt)
     print(characters)
