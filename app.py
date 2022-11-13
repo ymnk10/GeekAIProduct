@@ -29,6 +29,7 @@ pyocr.tesseract.TESSERACT_CMD = '/app/.apt/usr/bin/tesseract'
 app = Flask(__name__, static_folder='static')
 
 tangos = ['WORLD','BECAUSE','THOSE','COULD','first','even','through','after','never','most','another','while','begin','problem','during','number','believe','WOULD']
+
 zyukugos = ['いちいたいすい','けんばのろう','ようとうくにく', 'けいめいくとう', 'せっさたくま', 'たざんのいし', 'いちいせんしん', 'りゅうりゅうしんく', 'ぼうじゃくぶじん', 'こううんりゅうすい',
  'いしんでんしん', 'ぶんしつひんぴん', 'おんこちしん', 'いっせきにちょう', 'にりつはいはん', 'ちょうさんぼし', 'ちょうれいぼかい', 'なんせんほくば', 'ごえつどうしゅう', 'がしんしょうたん',
  'せいしのひそみ', 'めいぼうこうし', 'しめんそか', 'ばつざんがいせい', 'けんどちょうらい', 'えいようえいが', 'きんかいっちょう', 'もんぜんじゃくら', 'けんこんいってき', 'せんゆうこうらく',
@@ -150,15 +151,15 @@ def delete():
     print(zyukugos[-1])
     return redirect(url_for('index'))
 
-# @app.route('/delete2', methods=['POST'])
-# def delete2():
-#     a = tangos[0]
-#     tangos.pop(0)
-#     tangos.append(a)
-#     characters.clear()
-#     print(tangos[0])
-#     print(tangos[-1])
-#     return redirect(url_for('index'))
+@app.route('/delete2', methods=['POST'])
+def delete2():
+    a = tangos[0]
+    tangos.pop(0)
+    tangos.append(a)
+    characters.clear()
+    print(tangos[0])
+    print(tangos[-1])
+    return redirect(url_for('index'))
 
 # @app.route('/register_character', methods=['POST'])
 # def register_character():
