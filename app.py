@@ -17,7 +17,6 @@ import cv2 #pipでもインストールしたら解決
 import os
 import re
 
-
 pyocr.tesseract.TESSERACT_CMD = '/app/.apt/usr/bin/tesseract'
 
 #これ入れないと動かないっぽい(デバッグ10/13)
