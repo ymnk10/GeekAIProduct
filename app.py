@@ -120,8 +120,7 @@ def index3():
 def index5():
     tango = tangos[0]
     print(characters)
-    count = 0
-    return render_template('index5.html',tango=tango, characters=characters,count=count)
+    return render_template('index5.html',tango=tango, characters=characters)
 
 
 # @app.route('/delete', methods=['POST'])
