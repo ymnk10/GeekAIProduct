@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from PIL import Image
 import pyocr
 import base64
-from fastapi import FastAPI, UploadFile, File
+# from fastapi import FastAPI, UploadFile, File
 # import requests
 # from bs4 import BeautifulSoup
 import numpy as np
@@ -25,8 +25,8 @@ pyocr.tesseract.TESSERACT_CMD = '/app/.apt/usr/bin/tesseract'
 # db.create_characters_table()
 # DATABASE = 'database.db'
 
-app = FastAPI()
-# app = Flask(__name__, static_folder='static')
+# app = FastAPI()
+app = Flask(__name__, static_folder='static')
 
 tangos = ['WORLD','BECAUSE','THOSE','COULD','first','even','through','after','never','most','another','while','begin','problem','during','number','believe','WOULD']
 zyukugos = ['いちいたいすい','けんばのろう','ようとうくにく', 'けいめいくとう', 'せっさたくま', 'たざんのいし', 'いちいせんしん', 'りゅうりゅうしんく', 'ぼうじゃくぶじん', 'こううんりゅうすい',
