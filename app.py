@@ -1,31 +1,34 @@
 #!/usr/bin/python
 
-# from flaskr import app
+
 from flask import Flask, render_template, request, redirect, url_for
 from PIL import Image
 import pyocr
-# import base64
+import base64
+from fastapi import FastAPI, UploadFile, File
 # import requests
 # from bs4 import BeautifulSoup
-# import numpy as np
-# import io
+import numpy as np
+from io import BytesIO
 import requests
 from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 import cv2 #pipでもインストールしたら解決
 import os
+import re
 
 
 pyocr.tesseract.TESSERACT_CMD = '/app/.apt/usr/bin/tesseract'
+
 #これ入れないと動かないっぽい(デバッグ10/13)
 # db.create_zyukugo_table()
 # db.create_characters_table()
 # DATABASE = 'database.db'
 
-# app = Flask(__name__)
-app = Flask(__name__, static_folder='static')
+app = FastAPI()
+# app = Flask(__name__, static_folder='static')
 
-
+tangos = ['WORLD','BECAUSE','THOSE','COULD','first','even','through','after','never','most','another','while','begin','problem','during','number','believe','WOULD']
 zyukugos = ['いちいたいすい','けんばのろう','ようとうくにく', 'けいめいくとう', 'せっさたくま', 'たざんのいし', 'いちいせんしん', 'りゅうりゅうしんく', 'ぼうじゃくぶじん', 'こううんりゅうすい',
  'いしんでんしん', 'ぶんしつひんぴん', 'おんこちしん', 'いっせきにちょう', 'にりつはいはん', 'ちょうさんぼし', 'ちょうれいぼかい', 'なんせんほくば', 'ごえつどうしゅう', 'がしんしょうたん',
  'せいしのひそみ', 'めいぼうこうし', 'しめんそか', 'ばつざんがいせい', 'けんどちょうらい', 'えいようえいが', 'きんかいっちょう', 'もんぜんじゃくら', 'けんこんいってき', 'せんゆうこうらく',
@@ -83,7 +86,12 @@ def index():
 @app.route('/index2')
 def index2():
     zyukugo = zyukugos[0]
-    return render_template('index2.html',zyukugo=zyukugo)
+    return render_template('index2.html',zyukugo=zyukugo, characters=characters)
+
+@app.route('/index4')
+def index4():
+    tango = tangos[0]
+    return render_template('index4.html',tango=tango, characters=characters)
 
 
 # @app.route('/index3')
@@ -106,6 +114,13 @@ def index3():
     zyukugo = zyukugos[0]
     print(characters)
     return render_template('index3.html',zyukugo=zyukugo, characters=characters)
+
+@app.route('/index5')
+def index5():
+    tango = tangos[0]
+    print(characters)
+    count = 0
+    return render_template('index5.html',tango=tango, characters=characters,count=count)
 
 
 # @app.route('/delete', methods=['POST'])
@@ -135,7 +150,15 @@ def delete():
     print(zyukugos[-1])
     return redirect(url_for('index'))
 
-
+# @app.route('/delete2', methods=['POST'])
+# def delete2():
+#     a = tangos[0]
+#     tangos.pop(0)
+#     tangos.append(a)
+#     characters.clear()
+#     print(tangos[0])
+#     print(tangos[-1])
+#     return redirect(url_for('index'))
 
 # @app.route('/register_character', methods=['POST'])
 # def register_character():
@@ -167,42 +190,73 @@ def delete():
 
 @app.route('/register_character', methods=['POST'])
 def register_character():
-    os.chmod("Tesseract-OCR/tesseract.exe",0o777)
+    # os.chmod("Tesseract-OCR/tesseract.exe",0o777)
 
-    # root = "https://kyousei-tyan.herokuapp.com/"
-    # url = "https://kyousei-tyan.herokuapp.com/index2"
-    # # store_path = "C:\\Users\\ymnk1\\GeekSalon\\OCR2\\pafumepic.png" #\は二つ！！
-    # store_path = "idake.png" #\は二つ！！
-    # def img_store(path):
-    #     img = requests.get(path).content
-
-    #     print(path)
-
-    #     with open(store_path, "wb") as f:
-    #         f.write(img)
-
-    #     img_local = cv2.cvtColor(cv2.imread(store_path), cv2.COLOR_BGR2RGB)
-
-    #     plt.imshow(img_local)
-    #     plt.show()
-    # response = requests.get(url)
-    # soup = BeautifulSoup(open('templates/index2.html', encoding="utf-8"), "html.parser") #書式を指定しないとUnicodeDecodeErrorになる
-    # # soup = BeautifulSoup(url, "html.parser")
-    # print(soup)
-    # top_img2 = soup.find("div", id="bs").find("img", id="copyImg").get("src") #classを指定するときは「class_」で表すことに注意！！
-    # print(top_img2)
-    # img_url=root+top_img2 #img_urlは実際に写真自体をパスに指定しなければならない(フォルダじゃない！！)
-    # img_store(img_url)
+    # ajax通信で送られた各画像データをデコードし骨格検出
+    enc_data  = request.form["img1"]
+    dec_data = base64.b64decode(enc_data.split(',')[1] ) # 環境依存の様(","で区切って本体をdecode)
+    # print(dec_data)
+    dec_img  = Image.open(BytesIO(dec_data)).convert('L')
+    dec_img  = np.asarray(dec_img)
+    dec_img = Image.fromarray(dec_img)
 
 
-    engine = pyocr.libtesseract
-    dirname= 'idake.png' #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
-    txt = engine.image_to_string(Image.open(dirname), lang="eng", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
+    engines = pyocr.get_available_tools()
+    engine = engines[0]
+    # print(engine)
+    #  #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
+    txt = engine.image_to_string(dec_img, lang="jpn", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
+    txt = txt.replace('W','ん')
+    txt = txt.replace('w','ん')
+    txt = txt.replace('N/','ん')
+    txt = txt.replace('(こ','に')
+    txt = txt.replace('(に','に')
+    txt = txt.replace('ハ','い')
+    txt = txt.replace('フ','う')
+    txt = txt.replace('0','の')
+    txt = txt.replace('の）','の')
+    txt = txt.replace('マ','の')
+    txt = txt.replace('[3','け')
+    txt = txt.replace('い¥','い')
+    txt = txt.replace('し¥','い')
+    txt = txt.replace('し1','い')
+    txt = txt.replace('い,','い')
+    txt = txt.replace('は\'','は')
 
     characters.append(txt)
     print(characters)
     return redirect(url_for('index2'))
 
+
+@app.route('/register_character2', methods=['POST'])
+def register_character2():
+    # os.chmod("Tesseract-OCR/tesseract.exe",0o777)
+
+    # ajax通信で送られた各画像データをデコードし骨格検出
+    enc_data  = request.form["img1"]
+    dec_data = base64.b64decode(enc_data.split(',')[1] ) # 環境依存の様(","で区切って本体をdecode)
+    # print(dec_data)
+    dec_img  = Image.open(BytesIO(dec_data)).convert('L')
+    dec_img  = np.asarray(dec_img)
+    dec_img = Image.fromarray(dec_img)
+
+
+    engines = pyocr.get_available_tools()
+    engine = engines[0]
+    # print(engine)
+    #  #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
+    txt = engine.image_to_string(dec_img, lang="eng", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
+    txt = txt.replace('¥W','W')
+    txt = txt.replace('W/','W')
+    txt = txt.replace('@','O')
+    txt = txt.replace('©','O')
+    txt = txt.replace('0','O')
+    txt = txt.replace('¥V','W')
+    txt = txt.replace('VW','W')
+
+    characters.append(txt)
+    print(characters)
+    return redirect(url_for('index4'))
 
 # @app.route('/register_character', methods=['POST','GET'])
 # def register_character():
@@ -259,6 +313,6 @@ def register_character():
 #     return redirect(url_for('index'))
 
 if __name__ == "__main__":
-    app.run(port=22222)
+    app.run(port=22222, debug=True)
 
 #if __name__ == "__main__": をいれる

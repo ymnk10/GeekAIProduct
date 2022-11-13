@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"> </script>
+    <title>矯正ちゃん</title>
+</head>
+<body>
+<h1>矯正ちゃん</h1>
+<div class="bg">
+    <div class="box2">
+        <div class="charac">
+            <div class="enpitsu">この文字を下の黒枠に書いてみよう！</div>       
+            <p>{{ tango }}</p>
+        </div>
+
+        <div><canvas id="WriteCanvas" width="150" height="150"></canvas></div>
+        <canvas id="ButtonCanvas" width="240" height="100"></canvas>
+        <img id="copyImg" width="1" height="1" background="#000000">
+
+            <div class="button">
+                {% if tango |length > characters |length %}
+                <input class="buttonblue" type="button" value="次の文字へ" onclick="send_img()">
+                {% endif %}
+                <span style="margin-left: 0px">
+                    <a class="buttonred2" href="{{ url_for('index') }}">始めに戻る</a>
+                </span>
+                <span style="margin-left: 17px">
+                    <a class="buttongreen2" href="{{ url_for('index5') }}">結果を見る</a>
+                </span>
+                <form method="post" action="{{ url_for('register_character2') }}">
+                </form>
+            </div>
+        <br><br><br>
+    </div>
+</div>
+</body>
+</html>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+    window.addEventListener("load", init);
+    function init() {
+    
+        // --------------------------------------------------------------
+        // Stage1オブジェクト：WriteCanvas
+        // --------------------------------------------------------------
+        var stage1 = new createjs.Stage("WriteCanvas");
+    
+        // タッチイベントが有効なブラウザの場合、
+        // CreateJSでタッチイベントを扱えるようにする
+        if (createjs.Touch.isSupported()) {
+            createjs.Touch.enable(stage1);
+        }
+    
+        var shape = new createjs.Shape();   // シェイプを作成
+        stage1.addChild(shape);             // ステージに配置
+    
+        handleClick_reset();
+    
+        // ステージ上でマウスボタンを押した時のイベント設定
+        stage1.addEventListener("stagemousedown", handleDown);
+    
+        // マウスを押した時に実行される
+        function handleDown(event) {
+    
+            var paintColor = "#FFFFFF"                      // 筆ペンの色
+    
+            // 線の描画を開始
+            shape.graphics
+                    .beginStroke(paintColor)                // 指定のカラーで描画
+                    .setStrokeStyle(8, "round")            // 線の太さ、形
+                    .moveTo(event.stageX, event.stageY);    // 描画開始位置を指定
+    
+            // ステージ上でマウスを動かした時と離した時のイベント設定
+            stage1.addEventListener("stagemousemove", handleMove);
+            stage1.addEventListener("stagemouseup", handleUp);
+        }
+    
+        // マウスが動いた時に実行する
+        function handleMove(event) {
+    
+            // マウス座標への線を引く
+            shape.graphics.lineTo(event.stageX, event.stageY);
+        }
+    
+        // マウスボタンが離された時に実行される
+        function handleUp(event) {
+    
+            // マウス座標への線を引く
+            shape.graphics.lineTo(event.stageX, event.stageY);
+    
+            // 線の描画を終了する
+            shape.graphics.endStroke();
+    
+            // イベント解除
+            stage1.removeEventListener("stagemousemove", handleMove);
+            stage1.removeEventListener("stagemouseup", handleUp);
+        }
+    
+        createjs.Ticker.timingMode = createjs.Ticker.RAF;
+        createjs.Ticker.addEventListener("tick", onTick);
+    
+        function onTick() {
+            stage1.update(); // Stageの描画を更新
+        }
+    
+        // --------------------------------------------------------------
+        // Stage2オブジェクト：ButtonCanvas
+        // --------------------------------------------------------------
+        var stage2 = new createjs.Stage("ButtonCanvas");
+        stage2.enableMouseOver();
+    
+        // ボタンを作成
+        // var btn1 = createButton("PNG変換", 80, 30, "#0650c7");
+        // btn1.x = 20;
+        // btn1.y = 10;
+        // stage2.addChild(btn1);
+    
+        var btn2 = createButton("Reset!", 80, 30, "#d10a50");
+        btn2.x = 85;
+        btn2.y = 10;
+        stage2.addChild(btn2);
+    
+        // イベントを登録
+        // btn1.addEventListener("click", handleClick_png);
+        btn2.addEventListener("click", handleClick_reset);
+    
+        // PNG変換ボタン押下イベント
+        function handleClick_png(event) {
+    
+            // Canvasタグから画像に変換
+            stage1.update();
+            var png = stage1.canvas.toDataURL();
+            document.getElementById("copyImg").src = png;
+    
+            
+            // var w = window.open('about:blank');
+            // w.document.write("<img src='" + png + "'/>");
+            
+        }
+    
+        // Rest!ボタン押下イベント
+        function handleClick_reset(event) {
+    
+            // シェイプのグラフィックスを消去
+            shape.graphics.clear();
+            shape.graphics.beginFill("black");
+            shape.graphics.drawRect(0, 0, 240, 240);
+            shape.graphics.endFill();
+            stage1.update();
+            var png = stage1.canvas.toDataURL();
+            document.getElementById("copyImg").src = png;
+        }
+    
+        // 時間経過イベント
+        createjs.Ticker.addEventListener("tick", handleTick);
+        function handleTick() {
+    
+            // Stage2の描画を更新
+            stage2.update();
+        }
+    
+        /**
+        * @param {String} text ボタンのラベル文言です。
+        * @param {Number} width ボタンの横幅(単位はpx)です。
+        * @param {Number} height ボタンの高さ(単位はpx)です。
+        * @param {String} keyColor ボタンのキーカラーです。
+        * @returns {createjs.Container} ボタンの参照を返します。
+        */
+        function createButton(text, width, height, keyColor) {
+    
+            // ボタン要素をグループ化
+            var button = new createjs.Container();
+            button.name = text; // ボタンに参考までに名称を入れておく(必須ではない)
+            button.cursor = "pointer"; // ホバー時にカーソルを変更する
+    
+            // 通常時の座布団を作成
+            var bgUp = new createjs.Shape();
+            bgUp.graphics
+                  .setStrokeStyle(1.0)
+                  .beginStroke(keyColor)
+                  .beginFill("white")
+                  .drawRoundRect(0.5, 0.5, width - 1.0, height - 1.0, 4);
+            button.addChild(bgUp);
+            bgUp.visible = true; // 表示する
+    
+            // ロールオーバー時の座布団を作成
+            var bgOver = new createjs.Shape();
+            bgOver.graphics
+                  .beginFill(keyColor)
+                  .drawRoundRect(0, 0, width, height, 4);
+            bgOver.visible = false; // 非表示にする
+            button.addChild(bgOver);
+    
+            // ラベルを作成
+            var label = new createjs.Text(text, "18px sans-serif", keyColor);
+            label.x = width / 2;
+            label.y = height / 2;
+            label.textAlign = "center";
+            label.textBaseline = "middle";
+            button.addChild(label);
+    
+            // ロールオーバーイベントを登録
+            button.addEventListener("mouseover", handleMouseOver);
+            button.addEventListener("mouseout", handleMouseOut);
+    
+            // マウスオーバイベント
+            function handleMouseOver(event) {
+                bgUp.visble = false;
+                bgOver.visible = true;
+                label.color = "white";
+            }
+    
+            // マウスアウトイベント
+            function handleMouseOut(event) {
+                bgUp.visble = true;
+                bgOver.visible = false;
+                label.color = keyColor;
+            }
+    
+            return button;
+        }
+    }
+
+   
+
+    function send_img(){
+        //canvas elementを取得
+        // var canvas = document.getElementById('picture');
+        //base64データを取得（エンコード）
+        const canvas1 = document.getElementById("WriteCanvas");
+        var base641= canvas1.toDataURL('image/jpg');
+        // var anser   = document.getElementById('anser');
+  
+
+        var fData = new FormData();
+        fData.append('img1', base641);
+        // fData.append('anser', anser.value);
+        // console.log(fData.get('anser'))
+
+        // ajax送信
+        $.ajax({
+            //画像処理サーバーに返す場合
+            url: "{{url_for('register_character2')}}",   
+            type: 'POST',
+            dataType: 'text',
+            data: fData,
+            contentType: false,
+            processData: false,
+            success: function(data, dataType) {
+                //非同期で通信成功時に読み出される [200 OK 時]
+                location.reload();
+                console.log('Success', data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                //非同期で通信失敗時に読み出される
+                console.log('Error : ' + errorThrown);
+            }
+        });
+        }
+    </script>

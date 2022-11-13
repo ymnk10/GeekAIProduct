@@ -6,42 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/style.css">
     <script src="https://code.createjs.com/1.0.0/createjs.min.js"> </script>
-    <title>Document</title>
+    <title>矯正ちゃん</title>
 </head>
 <body>
-この文字を下に書いてみよう！
-<!-- {% for i in zyukugo %}
-    <tr>
-    <td>{{ i.zyukugo }}</td>
-    </tr>
-{% endfor %} -->
-{{ zyukugo }}
+<h1>矯正ちゃん</h1>
+<div class="bg">
+    <div class="box2">
+        <div class="charac">
+            <div class="enpitsu">この文字を下の黒枠に書いてみよう！</div>       
+            <p>{{ zyukugo }}</p>
+        </div>
 
-<div><canvas id="WriteCanvas" width="240" height="240"></canvas></div>
-<div><canvas id="ButtonCanvas" width="240" height="100"></canvas></div>
-PNG形式
+        <div><canvas id="WriteCanvas" width="150" height="150"></canvas></div>
+        <canvas id="ButtonCanvas" width="240" height="100"></canvas>
+        <img id="copyImg" width="1" height="1" background="#000000">
 
-
-
-<a href="{{ url_for('index') }}">削除</a>
-<a href="{{ url_for('index3') }}">3へ</a>
-
-<form method="post" action="{{ url_for('register_character') }}">
-    <!-- <table border="1"> -->
-            <!-- <tr>
-                <td><input type="text" name="character"></td>
-            </tr>
-      </table>
-      <br> -->
-      <div id="bs"><img id="copyImg" width="240" height="240" background="#000000"></div>
-      <input type="submit" value="追加">
-    </form>
-
-
+            <div class="button">
+                {% if zyukugo |length > characters |length %}
+                <input class="buttonblue" type="button" value="次の文字へ" onclick="send_img()">
+                {% endif %}
+                <span style="margin-left: 0px">
+                    <a class="buttonred2" href="{{ url_for('index') }}">始めに戻る</a>
+                </span>
+                <span style="margin-left: 17px">
+                    <a class="buttongreen2" href="{{ url_for('index3') }}">結果を見る</a>
+                </span>
+                <form method="post" action="{{ url_for('register_character') }}">
+                </form>
+            </div>
+        <br><br><br>
+    </div>
+</div>
 </body>
 </html>
 
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>
     window.addEventListener("load", init);
     function init() {
@@ -73,7 +72,7 @@ PNG形式
             // 線の描画を開始
             shape.graphics
                     .beginStroke(paintColor)                // 指定のカラーで描画
-                    .setStrokeStyle(20, "round")            // 線の太さ、形
+                    .setStrokeStyle(8, "round")            // 線の太さ、形
                     .moveTo(event.stageX, event.stageY);    // 描画開始位置を指定
     
             // ステージ上でマウスを動かした時と離した時のイベント設定
@@ -116,18 +115,18 @@ PNG形式
         stage2.enableMouseOver();
     
         // ボタンを作成
-        var btn1 = createButton("PNG変換", 80, 30, "#0650c7");
-        btn1.x = 20;
-        btn1.y = 10;
-        stage2.addChild(btn1);
+        // var btn1 = createButton("PNG変換", 80, 30, "#0650c7");
+        // btn1.x = 20;
+        // btn1.y = 10;
+        // stage2.addChild(btn1);
     
         var btn2 = createButton("Reset!", 80, 30, "#d10a50");
-        btn2.x = 110;
+        btn2.x = 85;
         btn2.y = 10;
         stage2.addChild(btn2);
     
         // イベントを登録
-        btn1.addEventListener("click", handleClick_png);
+        // btn1.addEventListener("click", handleClick_png);
         btn2.addEventListener("click", handleClick_reset);
     
         // PNG変換ボタン押下イベント
@@ -226,4 +225,41 @@ PNG形式
             return button;
         }
     }
+
+   
+
+    function send_img(){
+        //canvas elementを取得
+        // var canvas = document.getElementById('picture');
+        //base64データを取得（エンコード）
+        const canvas1 = document.getElementById("WriteCanvas");
+        var base641= canvas1.toDataURL('image/jpg');
+        // var anser   = document.getElementById('anser');
+  
+
+        var fData = new FormData();
+        fData.append('img1', base641);
+        // fData.append('anser', anser.value);
+        // console.log(fData.get('anser'))
+
+        // ajax送信
+        $.ajax({
+            //画像処理サーバーに返す場合
+            url: "{{url_for('register_character')}}",   
+            type: 'POST',
+            dataType: 'text',
+            data: fData,
+            contentType: false,
+            processData: false,
+            success: function(data, dataType) {
+                //非同期で通信成功時に読み出される [200 OK 時]
+                location.reload();
+                console.log('Success', data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                //非同期で通信失敗時に読み出される
+                console.log('Error : ' + errorThrown);
+            }
+        });
+        }
     </script>

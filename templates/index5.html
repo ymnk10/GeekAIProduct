@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <title>矯正ちゃん</title>
+</head>
+<body>
+    <h1>矯正ちゃん</h1>
+        <div class="bg">
+            <div class="box3">
+                <div class="box18">
+                    <h2 class="result">正しい答え</h2>
+                </div>
+                <p class="go">{{ tango }}</p>
+                <br>
+                <div class="box18">
+                    <h2 class="result2">あなたの書いた文字の認証結果</h2>
+                </div>
+            <p class="resultchara">
+            {% for i in range(tango|length) %}
+                {% if tango[i] == characters[i] %}
+                    <nobr class="abb">{{ characters[i] }}</nobr>
+                {% else %}
+                    <!-- {% set count = count + 1 %}
+                    {{ count }} -->
+                    <nobr class="abc">{{ characters[i] }}</nobr>
+                {% endif %}
+            {% endfor %}
+            </p>
+        <!-- {% if count == 0 %}
+        {{ count }} -->
+        <p class="end1">赤字の部分が正しくかけてないかも...</p>
+        <p class="end2">練習してうまくかけるようにしよう！</p>
+        <!-- {% else %}
+        <p class="end1">問題なく書けていますね！この調子で頑張りましょう！</p>
+        {% endif %} -->
+        <br>
+        <form method="post" action="{{ url_for('delete') }}">
+            <input class="buttonblue2" type="submit" value="はじめにもどる">
+        </form>
+        </div>
+        <br><br><br><br><br>
+    </div>  
+</body>
+</html>

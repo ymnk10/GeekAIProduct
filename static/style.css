@@ -1,15 +1,420 @@
 .abc{
     color: red;
-}
-*{
-    font-size: 19px;
+    font-size: 30px;
 }
 
-h1{
+.abb{
+    font-size: 30px;
+}
+
+*{
+    font-size: 20px;
+    /* font-family: 'Chalk', sans-serif;
+    font:'チョーク体', sans-serif; */
+}
+
+body{
+    font-family: 'Chalk', sans-serif;
+}
+
+.bg{
+    background-image: url('img/study7.jpg');
+    background-size: contain;
+    position: relative;
+    margin: 0px -10px -10px -10px;
+    padding: 20px;
+}
+
+@font-face {
+    font-family: 'Chalk';
+    src: url('..\Chalk-JP.otf') format('opentype');
+    }
+
+h1{ 
     color:#fff;
+    /* display: inline-block; */
     background-color:#140;
-    margin:1em 5px;
-    padding:15px;
+    padding:8px;
+    /* margin-right: 5%; */
     border:8px solid #a60;
     border-radius:3px;
-    box-shadow:2px 2px 4px #999,2px 2px 2px #020 inset;}
+    box-shadow:2px 2px 4px #999,2px 2px 2px #020 inset;
+    font-size: 30px;
+    text-align: center; 
+    margin: -7px -7px 0px -7px;
+}
+
+.enpitsu{
+    /* width: 200px; */
+    /* min-height: 100px; */
+    /* padding: 10px; */
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.box{
+    padding: 2em 0.5em 3em 0em;
+    background: #d0e5f8;
+    box-shadow: 0px 0px 0px 10px #d6ebff;
+    border: dashed 2px white;
+    border-radius: 8px;
+    text-align: center;
+    margin: 3em 5em 2em 5em;
+    opacity: 0.9;
+    animation-name: slideIn;
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:0.8s;/*3で解説*/
+    animation-iteration-count:once;/*4で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 0.3s;/*6で解説*/
+    animation-direction:normal;
+}
+.box > .enpitsu {
+    margin: 0; 
+    padding: 0;
+    animation-name: slideIn;
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:0.8s;/*3で解説*/
+    animation-iteration-count:once;/*4で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 0.4s;/*6で解説*/
+    animation-direction:normal;
+    
+}
+
+.box2{
+    padding: 2em 0.5em 3em 0em;
+    background: #d0e5f8;
+    border-radius: 8px;
+    box-shadow: 0px 0px 0px 10px #d6ebff;
+    border: dashed 2px white;
+    text-align: center;
+    margin: 1em 0.5em 2em 0.5em;
+    opacity: 0.9;
+}
+
+.intro {
+    padding: 0.2em 0.5em;
+    color: #565656;
+    background: #ffeaea;
+    box-shadow: 0px 0px 0px 10px #ffeaea;
+    border: dashed 2px #ffc3c3;
+    border-radius: 8px;
+    margin: 1em 3em 2em 3em;
+    opacity: 0.92;
+    animation-name: slideIn;
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:0.8s;/*3で解説*/
+    animation-iteration-count:once;/*4で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 0.1s;/*6で解説*/
+    animation-direction:normal;
+}
+.intro p {
+    margin: 0; 
+    padding: 0;
+    color: #020;
+    animation-name: slideIn;
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:0.8s;/*3で解説*/
+    animation-iteration-count:once;/*4で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 0.4s;/*6で解説*/
+    animation-direction:normal;
+}
+
+.charac {
+    padding: 0.2em 0.5em;
+    color: black;
+    background: #ffeaea;
+    box-shadow: 0px 0px 0px 10px #ffeaea;
+    border: dashed 2px #ffc3c3;
+    border-radius: 8px;
+    margin: 0em 2em 2em 2em;
+    opacity: 0.92;
+}
+.charac > .enpitsu {
+    margin: 0; 
+    padding: 0;
+    color: #020;
+}
+
+.charac > p {
+    margin: 0; 
+    padding: 0;
+    color: #020;
+    font-size: 35px;
+}
+
+.box_rgba{
+    height: 100%;
+    background: rgba(208, 229, 248, 0.7);
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+.buttonblue {
+    border: none;
+    border-left: solid 6px #5bb1fc;
+    color: #5bb1fc;
+    border-radius: 0 8px 8px 0;
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5rem;
+    background: #f7f7f7;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.22);
+    transform: translateY(2px);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 50%); 
+}
+
+.buttonblue2 {
+    border: none;
+    border-left: solid 6px #5bb1fc;
+    color: #5bb1fc;
+    border-radius: 0 8px 8px 0;
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5rem;
+    background: #f7f7f7;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.22);
+    transform: translateY(2px);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 50%); 
+    animation-name: slideIn;
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:0.8s;/*3で解説*/
+    animation-iteration-count:once;/*4で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 3s;/*6で解説*/
+    animation-direction:normal;
+}
+
+.buttonblue:hover{
+    transform: scale(1.1, 1.1);
+  }
+
+.buttonred:hover{
+    transform: scale(1.1, 1.1);
+  }
+
+.buttongreen:hover{
+transform: scale(1.1, 1.1);
+}
+
+.buttonred {
+    border-left: solid 6px #ff3c3c;
+    color: #ff3c3c;
+    border-radius: 0 8px 8px 0;
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5rem;
+    background: #f7f7f7;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.22);
+    transform: translateY(2px);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 50%);
+    animation-name: slideIn;
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:0.8s;/*3で解説*/
+    animation-iteration-count:once;/*4で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 0.5s;/*6で解説*/
+    animation-direction:normal;
+}
+
+.buttonred2 {
+    border-left: solid 6px #ff3c3c;
+    color: #ff3c3c;
+    border-radius: 0 8px 8px 0;
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5rem;
+    background: #f7f7f7;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.22);
+    transform: translateY(2px);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 50%);
+}
+
+/* 
+.buttonred.slidein.is-animated {
+    animation: slideIn 1s cubic-bezier(0.25, 1, 0.5, 1) 1 forwards;
+  } */
+   
+@keyframes slideIn {
+0% {
+    transform: translateX(180px);
+    opacity: 0;
+}
+100% {
+    transform: translateX(0);
+}
+40%,100% {
+    opacity: 1;
+}
+}
+
+.centerb{
+    text-align: center;
+}
+
+.buttongreen {
+    border-left: solid 6px #58ad5a;
+    color: #58ad5a;
+    border-radius: 0 8px 8px 0;
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5rem;
+    background: #f7f7f7;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.22);
+    transform: translateY(2px);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 50%);
+    animation-name: slideIn;
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:0.8s;/*3で解説*/
+    animation-iteration-count:once;/*4で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 0.6s;/*6で解説*/
+    animation-direction:normal;
+}
+
+.buttongreen2 {
+    border-left: solid 6px #58ad5a;
+    color: #58ad5a;
+    border-radius: 0 8px 8px 0;
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5rem;
+    background: #f7f7f7;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.22);
+    transform: translateY(2px);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 50%);
+}
+
+
+.button input{
+    margin-right: 20px;
+}
+
+.result{
+    font-size: 30px;
+    padding-top: 0px;
+    animation-name: fadeInAnime;/*1で解説*/
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:1s;/*3で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 0.9s;/*6で解説*/
+    animation-direction:normal;/*7で解説*/
+}
+
+.result2{
+    font-size: 25px;
+    padding-top: 0px;
+    animation-name: fadeInAnime;/*1で解説*/
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:1s;/*3で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 1.6s;/*6で解説*/
+    animation-direction:normal;/*7で解説*/
+}
+
+.go{
+    font-size: 30px;
+    animation-name: fadeInAnime;/*1で解説*/
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:1s;/*3で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 0.9s;/*6で解説*/
+    animation-direction:normal;/*7で解説*/
+}
+
+.resultchara{
+    animation-name: fadeInAnime;/*1で解説*/
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:1s;/*3で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 2.5s;/*6で解説*/
+    animation-direction:normal;/*7で解説*/
+}
+
+.box3{
+    padding: 0.5em 0.5em 3em 0em;
+    background: #d0e5f8;
+    box-shadow: 0px 0px 0px 10px #d6ebff;
+    border: dashed 2px white;
+    border-radius: 8px;
+    text-align: center;
+    margin: 1em 2em 2em 2em;
+    opacity: 0.9;
+    animation-name: slideIn;
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:0.8s;/*3で解説*/
+    animation-iteration-count:once;/*4で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 0.3s;/*6で解説*/
+    animation-direction:normal;
+}
+
+.end1{
+    margin-top: 35px;
+    animation-name: fadeInAnime;/*1で解説*/
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:1s;/*3で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 3s;/*6で解説*/
+    animation-direction:normal;/*7で解説*/
+}
+
+.end2{
+    animation-name: fadeInAnime;/*1で解説*/
+    animation-fill-mode:backwards;/*2で解説*/
+    animation-duration:1s;/*3で解説*/
+    animation-timing-function:ease;/*5で解説*/
+    animation-delay: 3s;/*6で解説*/
+    animation-direction:normal;/*7で解説*/
+}
+
+@keyframes fadeInAnime{
+    0% {
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+
+
+/* .box18{
+    margin:2em 0;
+    position: relative;
+    padding: 0.25em 1em;
+    border: solid 2px #ffcb8a;
+    border-radius: 3px 0 3px 0;
+}
+.box18:before,.box18:after
+{
+    content: '';
+    position: absolute;
+    width:10px;
+    height: 10px;
+    border: solid 2px #ffcb8a;
+    border-radius: 50%;
+}
+.box18:after {
+    top:-12px;
+    left:-12px;
+}
+.box18:before {
+    bottom:-12px;
+    right:-12px;
+}
+.box18 h2 {
+    margin: 0; 
+    padding: 0;
+} */
