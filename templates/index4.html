@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
     <script src="https://code.createjs.com/1.0.0/createjs.min.js"> </script>
     <title>矯正ちゃん</title>
 </head>
@@ -22,8 +22,8 @@
         <img id="copyImg" width="1" height="1" background="#000000">
 
             <div class="button">
-                {% if tango |length > characters |length %}
-                <input class="buttonblue" type="button" value="次の文字へ" onclick="send_img()">
+                {% if tango |length > characters_eng |length %}
+                <input class="buttonblue" type="button" value="次の文字へ" onclick="send_img_eng()">
                 {% endif %}
                 <span style="margin-left: 0px">
                     <a class="buttonred2" href="{{ url_for('index') }}">始めに戻る</a>
@@ -31,7 +31,7 @@
                 <span style="margin-left: 17px">
                     <a class="buttongreen2" href="{{ url_for('index5') }}">結果を見る</a>
                 </span>
-                <form method="post" action="{{ url_for('register_character2') }}">
+                <form method="post" action="{{ url_for('register_character_eng') }}">
                 </form>
             </div>
         <br><br><br>
@@ -228,24 +228,24 @@
 
    
 
-    function send_img(){
+    function send_img_eng(){
         //canvas elementを取得
         // var canvas = document.getElementById('picture');
         //base64データを取得（エンコード）
-        const canvas1 = document.getElementById("WriteCanvas");
-        var base641= canvas1.toDataURL('image/jpg');
+        const canvas2 = document.getElementById("WriteCanvas");
+        var base642= canvas2.toDataURL('image/jpg');
         // var anser   = document.getElementById('anser');
   
 
         var fData = new FormData();
-        fData.append('img1', base641);
+        fData.append('img2', base642); //変更
         // fData.append('anser', anser.value);
         // console.log(fData.get('anser'))
 
         // ajax送信
         $.ajax({
             //画像処理サーバーに返す場合
-            url: "{{url_for('register_character2')}}",   
+            url: "{{url_for('register_character_eng')}}",   
             type: 'POST',
             dataType: 'text',
             data: fData,

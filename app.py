@@ -17,7 +17,8 @@ import cv2 #pipでもインストールしたら解決
 import os
 import re
 
-pyocr.tesseract.TESSERACT_CMD = '/app/.apt/usr/bin/tesseract'
+pyocr.tesseract.TESSERACT_CMD = '/app/.apt/usr/bin/tesseract' #パブリッシュした時はこっちで動かす
+# pyocr.tesseract.TESSERACT_CMD = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #ローカルの時はこっちで動かす
 
 #これ入れないと動かないっぽい(デバッグ10/13)
 # db.create_zyukugo_table()
@@ -66,7 +67,7 @@ zyukugos = ['いちいたいすい','けんばのろう','ようとうくにく'
  'どくしょさんとう', 'だんしょうしゅぎ', 'だんかんれいぼく', 'ぶんじんぼっかく', 'きいんせいどう', 'じんめんとうか', 'じんめんじゅうしん', 'げいいんばしょく', 'すいせいむし', 'せんしゃくていしょう',
  'どうこういきょく', 'いきとうごう', 'ばくぎゃくのとも', 'そうじょうのじん', 'こうさんこうしん', 'ぜんだいみもん', 'ふえきりゅうこう', 'ぼくとつふけん', 'きんせいぎょくしん', 'へんげんせきご', 'いっちょういっせき', 'いちごいちえ']
 
-characters = []
+
 
 @app.route('/')
 def index():
@@ -81,7 +82,8 @@ def index():
 #     for row in db_zyukugo:
 #         zyukugo.append({'zyukugo': row[0]})
 #     return render_template('index2.html',zyukugo=zyukugo)
-
+characters = []
+characters_eng = []
 
 @app.route('/index2')
 def index2():
@@ -91,7 +93,7 @@ def index2():
 @app.route('/index4')
 def index4():
     tango = tangos[0]
-    return render_template('index4.html',tango=tango, characters=characters)
+    return render_template('index4.html',tango=tango, characters_eng=characters_eng)
 
 
 # @app.route('/index3')
@@ -118,8 +120,8 @@ def index3():
 @app.route('/index5')
 def index5():
     tango = tangos[0]
-    print(characters)
-    return render_template('index5.html',tango=tango, characters=characters)
+    print(characters_eng)
+    return render_template('index5.html',tango=tango, characters_eng=characters_eng)
 
 
 # @app.route('/delete', methods=['POST'])
@@ -145,16 +147,18 @@ def delete():
     zyukugos.pop(0)
     zyukugos.append(a)
     characters.clear()
+    characters_eng.clear()
     print(zyukugos[0])
     print(zyukugos[-1])
     return redirect(url_for('index'))
 
 @app.route('/delete2', methods=['POST'])
 def delete2():
-    a = tangos[0]
+    b = tangos[0]
     tangos.pop(0)
-    tangos.append(a)
+    tangos.append(b)
     characters.clear()
+    characters_eng.clear()
     print(tangos[0])
     print(tangos[-1])
     return redirect(url_for('index'))
@@ -227,34 +231,34 @@ def register_character():
     return redirect(url_for('index2'))
 
 
-@app.route('/register_character2', methods=['POST'])
-def register_character2():
+@app.route('/register_character_eng', methods=['POST'])
+def register_character_eng():
     # os.chmod("Tesseract-OCR/tesseract.exe",0o777)
 
     # ajax通信で送られた各画像データをデコードし骨格検出
-    enc_data  = request.form["img1"]
-    dec_data = base64.b64decode(enc_data.split(',')[1] ) # 環境依存の様(","で区切って本体をdecode)
+    enc_data_eng  = request.form["img2"] #変更
+    dec_data_eng = base64.b64decode(enc_data_eng.split(',')[1] ) # 環境依存の様(","で区切って本体をdecode)
     # print(dec_data)
-    dec_img  = Image.open(BytesIO(dec_data)).convert('L')
-    dec_img  = np.asarray(dec_img)
-    dec_img = Image.fromarray(dec_img)
+    dec_img_eng  = Image.open(BytesIO(dec_data_eng)).convert('L')
+    dec_img_eng  = np.asarray(dec_img_eng)
+    dec_img_eng = Image.fromarray(dec_img_eng)
 
 
     engines = pyocr.get_available_tools()
     engine = engines[0]
     # print(engine)
     #  #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
-    txt = engine.image_to_string(dec_img, lang="eng", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
-    txt = txt.replace('¥W','W')
-    txt = txt.replace('W/','W')
-    txt = txt.replace('@','O')
-    txt = txt.replace('©','O')
-    txt = txt.replace('0','O')
-    txt = txt.replace('¥V','W')
-    txt = txt.replace('VW','W')
+    txt_eng = engine.image_to_string(dec_img_eng, lang="eng", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
+    txt_eng = txt_eng.replace('¥W','W')
+    txt_eng = txt_eng.replace('W/','W')
+    txt_eng = txt_eng.replace('@','O')
+    txt_eng = txt_eng.replace('©','O')
+    txt_eng = txt_eng.replace('0','O')
+    txt_eng = txt_eng.replace('¥V','W')
+    txt_eng = txt_eng.replace('VW','W')
 
-    characters.append(txt)
-    print(characters)
+    characters_eng.append(txt_eng)
+    print(characters_eng)
     return redirect(url_for('index4'))
 
 # @app.route('/register_character', methods=['POST','GET'])

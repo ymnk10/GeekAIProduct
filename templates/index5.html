@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
     <title>矯正ちゃん</title>
 </head>
 <body>
@@ -21,10 +21,10 @@
                 </div>
             <p class="resultchara">
             {% for i in range(tango|length) %}
-                {% if tango[i] == characters[i] %}
-                    <nobr class="abb">{{ characters[i] }}</nobr>
+                {% if tango[i] == characters_eng[i] %}
+                    <nobr class="abb">{{ characters_eng[i] }}</nobr>
                 {% else %}
-                    <nobr class="abc">{{ characters[i] }}</nobr>
+                    <nobr class="abc">{{ characters_eng[i] }}</nobr>
                 {% endif %}
             {% endfor %}
             </p>
