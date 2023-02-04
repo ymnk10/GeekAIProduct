@@ -315,7 +315,7 @@ def register_character_eng():
 #     con.close()
 #     return redirect(url_for('index'))
 
-if __name__ == "__main__":
-    app.run(port=22222, debug=True)
+# if __name__ == "__main__":
+#     app.run(port=22222, debug=True)
 
 #if __name__ == "__main__": をいれる
