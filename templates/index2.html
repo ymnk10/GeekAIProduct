@@ -240,8 +240,8 @@
         // var anser   = document.getElementById('anser');
 
 
-        var fData = new FormData();
-        fData.append('img1', base641);
+        var fData1 = new FormData();
+        fData1.append('img1', base641);
         // fData.append('anser', anser.value);
         // console.log(fData.get('anser'))
 
@@ -251,7 +251,7 @@
             url: "{{url_for('register_character')}}",
             type: 'POST',
             dataType: 'text',
-            data: fData,
+            data: fData1,
             contentType: false,
             processData: false,
             success: function (data, dataType) {
