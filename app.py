@@ -1,13 +1,10 @@
 #!/usr/bin/python
 
-
+#コメントアウト色々含んだバージョンはgooglekeep「kyou-sei-tyan app.pyコード(2/4)」に記載
 from flask import Flask, render_template, request, redirect, url_for
 from PIL import Image
 import pyocr
 import base64
-# from fastapi import FastAPI, UploadFile, File
-# import requests
-# from bs4 import BeautifulSoup
 import numpy as np
 from io import BytesIO
 import requests
@@ -20,13 +17,13 @@ import re
 pyocr.tesseract.TESSERACT_CMD = '/app/.apt/usr/bin/tesseract' #パブリッシュした時はこっちで動かす
 # pyocr.tesseract.TESSERACT_CMD = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe" #ローカルの時はこっちで動かす
 
-#これ入れないと動かないっぽい(デバッグ10/13)
-# db.create_zyukugo_table()
-# db.create_characters_table()
-# DATABASE = 'database.db'
 
-# app = FastAPI()
 app = Flask(__name__, static_folder='static')
+
+characters = []
+characters_eng = []
+engines = pyocr.get_available_tools()
+engine = engines[0]
 
 tangos = ['WORLD','BECAUSE','THOSE','COULD','first','even','through','after','never','most','another','while','begin','problem','during','number','believe','WOULD']
 
@@ -73,17 +70,7 @@ zyukugos = ['いちいたいすい','けんばのろう','ようとうくにく'
 def index():
     return render_template('index.html')
 
-# @app.route('/index2')
-# def index2():
-#     con = sqlite3.connect(DATABASE)
-#     db_zyukugo = con.execute('SELECT * FROM zyukugo LIMIT 1').fetchall()
-#     con.close()
-#     zyukugo = []
-#     for row in db_zyukugo:
-#         zyukugo.append({'zyukugo': row[0]})
-#     return render_template('index2.html',zyukugo=zyukugo)
-characters = []
-characters_eng = []
+
 
 @app.route('/index2')
 def index2():
@@ -94,22 +81,6 @@ def index2():
 def index4():
     tango = tangos[0]
     return render_template('index4.html',tango=tango, characters_eng=characters_eng)
-
-
-# @app.route('/index3')
-# def index3():
-#     con = sqlite3.connect(DATABASE)
-#     db_zyukugo = con.execute('SELECT * FROM zyukugo LIMIT 1').fetchall()
-#     db_characters = con.execute('SELECT * FROM characters').fetchall()
-#     con.close()
-#     zyukugo = []
-#     characters = []
-#     for row in db_zyukugo:
-#         zyukugo.append({'zyukugo': row[0]})
-#     for row in db_characters:
-#         characters.append(row[0])
-#     print(characters)
-#     return render_template('index3.html',zyukugo=zyukugo, characters=characters)
 
 @app.route('/index3')
 def index3():
@@ -122,23 +93,6 @@ def index5():
     tango = tangos[0]
     print(characters_eng)
     return render_template('index5.html',tango=tango, characters_eng=characters_eng)
-
-
-# @app.route('/delete', methods=['POST'])
-# def delete():
-#     con = sqlite3.connect(DATABASE)
-#     db_zyukugo_top = con.execute('SELECT * FROM zyukugo LIMIT 1').fetchall()
-#     for i in range(len(db_zyukugo_top)):
-#         db_zyukugo_top[i] = str(db_zyukugo_top[i])
-#     print(type(db_zyukugo_top[0][2]))
-#     print(db_zyukugo_top[0][2]) #一文字目が「(」、二文字目が「'」のため、三文字目[2]から数える
-
-#     con.execute('delete from zyukugo where zyukugo = (select * from zyukugo limit 1 offset 0);') #１行目を削除
-#     db_zyukugo_top = request.form['db_zyukugo_top']
-#     con.execute('INSERT INTO zyukugo VALUES(?)',[db_zyukugo_top])
-#     con.commit()
-#     con.close()
-#     return redirect(url_for('index'))
 
 
 @app.route('/delete', methods=['POST'])
@@ -163,37 +117,9 @@ def delete2():
     print(tangos[-1])
     return redirect(url_for('index'))
 
-# @app.route('/register_character', methods=['POST'])
-# def register_character():
-#     copyimg = request.form['copyimg']
-#     print(copyimg)
-
-#     engines = pyocr.get_available_tools()
-#     engine = engines[0]
-#     dirname= 'idake.png' #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
-#     txt = engine.image_to_string(Image.open(dirname), lang="jpn", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
-
-#     # for i in range(7):
-#     #     dirname= '{}.png'.format(i)
-#     #     txt = engine.image_to_string(Image.open(dirname), lang="jpn", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
-#     #     con = sqlite3.connect(DATABASE)
-#     #     con.execute('INSERT INTO characters VALUES(?)',[txt])
-
-#     con = sqlite3.connect(DATABASE)
-#     con.execute('INSERT INTO characters VALUES(?)',[txt])
-#     chara_list.append(txt)
-#     con.commit()
-#     con.close()
-#     return redirect(url_for('index2'))
-
-
-
-
-
 
 @app.route('/register_character', methods=['POST'])
 def register_character():
-    # os.chmod("Tesseract-OCR/tesseract.exe",0o777)
 
     # ajax通信で送られた各画像データをデコードし骨格検出
     enc_data  = request.form["img1"]
@@ -202,10 +128,8 @@ def register_character():
     dec_img  = Image.open(BytesIO(dec_data)).convert('L')
     dec_img  = np.asarray(dec_img)
     dec_img = Image.fromarray(dec_img)
-
-
-    engines = pyocr.get_available_tools()
-    engine = engines[0]
+    # engines = pyocr.get_available_tools()
+    # engine = engines[0]
     # print(engine)
     #  #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
     txt = engine.image_to_string(dec_img, lang="jpn", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
@@ -233,7 +157,6 @@ def register_character():
 
 @app.route('/register_character_eng', methods=['POST'])
 def register_character_eng():
-    # os.chmod("Tesseract-OCR/tesseract.exe",0o777)
 
     # ajax通信で送られた各画像データをデコードし骨格検出
     enc_data_eng  = request.form["img2"] #変更
@@ -244,8 +167,8 @@ def register_character_eng():
     dec_img_eng = Image.fromarray(dec_img_eng)
 
 
-    engines = pyocr.get_available_tools()
-    engine = engines[0]
+    # engines = pyocr.get_available_tools()
+    # engine = engines[0]
     # print(engine)
     #  #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
     txt_eng = engine.image_to_string(dec_img_eng, lang="eng", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
@@ -260,60 +183,6 @@ def register_character_eng():
     characters_eng.append(txt_eng)
     print(characters_eng)
     return redirect(url_for('index4'))
-
-# @app.route('/register_character', methods=['POST','GET'])
-# def register_character():
-#     file = './base.jpg'
-#     base_image = Image.open(file)
-#     base_image = np.asarray(base_image)
-
-#     for i in range(len(zyukugos[0])):
-
-
-
-
-
-    # copyimg = request.form['copyimg']
-    # print(copyimg)
-
-    # engines = pyocr.get_available_tools()
-    # engine = engines[0]
-    # dirname= 'idake.png' #この関数内でbsでスクレイピングした写真をとりいれ、読み込んだひらがなをDBに保存
-    # txt = engine.image_to_string(Image.open(dirname), lang="jpn", builder=pyocr.builders.TextBuilder(tesseract_layout=10))
-
-    # characters.append(txt)
-    # print(characters)
-    # return redirect(url_for('index2'))
-
-    
-
-# @app.route('/insert', methods=['POST'])
-# def insert():
-#     zyukugo = request.form['zyukugo']
-
-#     con = sqlite3.connect(DATABASE)
-#     con.execute('INSERT INTO zyukugo VALUES(?)',[zyukugo])
-#     con.commit()
-#     con.close()
-#     return redirect(url_for('index'))
-
-
-
-
-
-# @app.route('/form')
-# def form():
-#     return render_template('form.html')
-
-# @app.route('/register', methods=['POST'])
-# def register():
-#     zyukugo = request.form['zyukugo']
-
-#     con = sqlite3.connect(DATABASE)
-#     con.execute('INSERT INTO zyukugo VALUES(?)',[zyukugo])
-#     con.commit()
-#     con.close()
-#     return redirect(url_for('index'))
 
 # if __name__ == "__main__":
 #     app.run(port=22222, debug=True)
